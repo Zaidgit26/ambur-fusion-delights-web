@@ -1,72 +1,93 @@
-import { Button } from "@/components/ui/button";
-import { Star, Clock, MapPin, ChefHat } from "lucide-react";
 import heroImage from "@/assets/hero-biryani.jpg";
+import { Button } from "@/components/ui/button";
 
 const Hero = () => {
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${heroImage})` }}
-      >
-        <div className="absolute inset-0 bg-black/40"></div>
-      </div>
-      
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="fade-in-up">
-          {/* Restaurant Badge */}
-          <div className="inline-flex items-center space-x-2 bg-background/20 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-6">
-            <ChefHat className="w-5 h-5 text-golden-rice" />
-            <span className="text-golden-rice font-medium">Authentic South Indian Cuisine</span>
-          </div>
-          
-          {/* Main Heading */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            Experience the
-            <span className="block text-golden-rice">Legendary Ambur</span>
-            <span className="block">Briyani</span>
-          </h1>
-          
-          {/* Subheading */}
-          <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Savor the authentic flavors of traditional Ambur biryani, crafted with aromatic spices, 
-            premium basmati rice, and tender meat, served with love since generations.
-          </p>
-          
-          {/* Features */}
-          <div className="flex flex-wrap justify-center items-center gap-6 mb-10 text-white/80">
-            <div className="flex items-center space-x-2">
-              <Star className="w-5 h-5 text-golden-rice fill-current" />
-              <span>4.8★ Rated</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Clock className="w-5 h-5 text-golden-rice" />
-              <span>30 min delivery</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <MapPin className="w-5 h-5 text-golden-rice" />
-              <span>Free delivery</span>
-            </div>
-          </div>
-          
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button variant="hero" size="lg" className="text-lg px-8 py-4 scale-on-hover">
-              Order Online Now
-            </Button>
-            <Button variant="outline" size="lg" className="text-lg px-8 py-4 bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 scale-on-hover">
-              View Menu
-            </Button>
-          </div>
-        </div>
+      {/* Direct Video Background Implementation */}
+      <div className="absolute inset-0">
+        {/* Fallback Background Image with Animation */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-slow-zoom"
+          style={{ backgroundImage: `url(${heroImage})` }}
+        />
+
+        {/* Video Background */}
+        <video
+          className="absolute inset-0 w-full h-full object-cover opacity-80"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          onLoadStart={() => console.log('Video load start')}
+          onLoadedData={() => {
+            console.log('Video loaded successfully');
+            // Make video visible when loaded
+            const video = document.querySelector('video');
+            if (video) video.style.opacity = '1';
+          }}
+          onError={(e) => {
+            console.error('Video error:', e);
+            console.error('Video src:', (e.target as HTMLVideoElement)?.src);
+          }}
+          onCanPlay={() => console.log('Video can play')}
+          onCanPlayThrough={() => console.log('Video can play through')}
+          style={{ opacity: 0, transition: 'opacity 0.5s ease-in-out' }}
+        >
+          <source src="/video/hero.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-black/50 to-black/40" />
       </div>
 
-      {/* Floating Elements */}
-      <div className="absolute top-1/4 left-10 w-3 h-3 bg-golden-rice rounded-full animate-bounce delay-100"></div>
-      <div className="absolute top-1/3 right-16 w-2 h-2 bg-saffron rounded-full animate-bounce delay-300"></div>
-      <div className="absolute bottom-1/4 left-20 w-4 h-4 bg-primary-glow rounded-full animate-bounce delay-500"></div>
+
+
+      {/* Top Right Restaurant Name */}
+      <div className="absolute top-8 right-8 z-20 text-right">
+        <h2 className="font-spirax text-2xl md:text-3xl text-white mb-1">
+          Original Ambur Briyani
+        </h2>
+        <p className="font-spirax text-lg md:text-xl text-golden-rice">
+          Deluxe
+        </p>
+        <p className="font-poppins text-sm text-white/80 mt-1">
+          Since 1967
+        </p>
+      </div>
+
+      {/* Center Content */}
+      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        {/* Main Title */}
+        <h1 className="font-spirax text-4xl md:text-6xl lg:text-7xl text-white mb-4 leading-tight">
+          The taste of authentic
+        </h1>
+
+        {/* Subtitle */}
+        <h2 className="font-spirax text-3xl md:text-4xl lg:text-5xl text-red-500 mb-12">
+          Ambur Briyani
+        </h2>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <Button
+            variant="outline"
+            size="lg"
+            className="font-poppins-medium bg-transparent border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-8 py-3 rounded-lg transition-all duration-300 min-w-[140px]"
+          >
+            MENU
+          </Button>
+
+          <Button
+            size="lg"
+            className="font-poppins-medium bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg transition-all duration-300 min-w-[140px]"
+          >
+            ORDER ONLINE
+          </Button>
+        </div>
+      </div>
     </section>
   );
 };

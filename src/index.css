@@ -1,3 +1,6 @@
+/* Import Consistent Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Spirax&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -123,31 +126,121 @@
 }
 
 @layer utilities {
+  /* Consistent Typography Classes */
+  .font-primary {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .font-primary-heading {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .font-primary-bold {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .font-secondary {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+
+  .font-secondary-medium {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  .font-secondary-bold {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    letter-spacing: 0.005em;
+  }
+
+  .font-spirax {
+    font-family: 'Spirax', cursive;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+
+  .font-poppins {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .font-poppins-medium {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .font-poppins-bold {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  /* Dynamic Background Animation */
+  .hero-bg-slideshow {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-slideshow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/lovable-uploads/bc217bd4-1f1a-4f3e-bb46-8db03ee0c5e5.png') center/cover no-repeat;
+    animation: backgroundSlide 15s infinite;
+    z-index: -2;
+  }
+
+  .hero-bg-slideshow::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6), rgba(0,0,0,0.4));
+    z-index: -1;
+  }
+
   /* Custom Animation Classes */
   .fade-in-up {
     animation: fadeInUp 0.8s ease-out forwards;
   }
-  
+
   .fade-in-left {
     animation: fadeInLeft 0.8s ease-out forwards;
   }
-  
+
   .fade-in-right {
     animation: fadeInRight 0.8s ease-out forwards;
   }
-  
+
   .scale-on-hover {
     transition: var(--transition-smooth);
   }
-  
+
   .scale-on-hover:hover {
     transform: scale(1.05);
   }
-  
+
   .glow-on-hover {
     transition: var(--transition-smooth);
   }
-  
+
   .glow-on-hover:hover {
     box-shadow: var(--shadow-glow);
   }
@@ -169,9 +262,82 @@
   .shadow-warm {
     box-shadow: var(--shadow-warm);
   }
-  
+
   .shadow-glow {
     box-shadow: var(--shadow-glow);
+  }
+
+  /* Custom Color Classes */
+  .text-golden-rice {
+    color: hsl(var(--golden-rice));
+  }
+
+  .text-saffron {
+    color: hsl(var(--saffron));
+  }
+
+  .text-spice-warm {
+    color: hsl(var(--spice-warm));
+  }
+
+  .bg-golden-rice {
+    background-color: hsl(var(--golden-rice));
+  }
+
+  .bg-saffron {
+    background-color: hsl(var(--saffron));
+  }
+
+  .bg-spice-warm {
+    background-color: hsl(var(--spice-warm));
+  }
+
+  /* Navbar specific styles */
+  .navbar-glass {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+  }
+
+  .navbar-scrolled {
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .nav-item-active {
+    background: linear-gradient(135deg, hsl(var(--golden-rice) / 0.15), hsl(var(--saffron) / 0.1));
+    border: 1px solid hsl(var(--golden-rice) / 0.4);
+    box-shadow: 0 0 20px hsl(var(--golden-rice) / 0.3);
+  }
+
+  /* Removed .nav-item-hover as it's now handled by Framer Motion */
+
+  .mascot-glow {
+    box-shadow: 0 0 30px hsl(var(--golden-rice) / 0.4), 0 0 60px hsl(var(--saffron) / 0.2);
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    .navbar-glass,
+    .navbar-scrolled {
+      padding: 0.5rem 1rem;
+    }
+
+    .nav-item-active {
+      margin: 0.25rem 0;
+    }
+  }
+
+  /* Smooth scrolling for all elements */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Focus styles for accessibility */
+  .focus\:ring-golden-rice\/50:focus {
+    --tw-ring-color: hsl(var(--golden-rice) / 0.5);
   }
 }
 
@@ -205,5 +371,79 @@
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+@keyframes backgroundSlide {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    filter: brightness(1) contrast(1);
+  }
+  25% {
+    transform: scale(1.05) rotate(0.5deg);
+    filter: brightness(1.1) contrast(1.1);
+  }
+  50% {
+    transform: scale(1.02) rotate(-0.3deg);
+    filter: brightness(0.95) contrast(1.05);
+  }
+  75% {
+    transform: scale(1.08) rotate(0.2deg);
+    filter: brightness(1.05) contrast(1.15);
+  }
+}
+
+@keyframes floatingElements {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+}
+
+@keyframes textGlow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.4);
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes navbarSlideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes mascotBounce {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotate(5deg);
+  }
+  75% {
+    transform: translateY(-5px) rotate(-5deg);
   }
 }

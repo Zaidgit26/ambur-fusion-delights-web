@@ -13,7 +13,7 @@ const FeaturedDish = () => {
             Our Signature Dish
           </Badge>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            The Legendary Ambur Briyani
+            The Original Ambur Briyani
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             A culinary masterpiece passed down through generations, featuring perfectly spiced basmati rice, 

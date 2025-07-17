@@ -12,7 +12,7 @@ const Footer = () => {
           <div className="lg:col-span-1">
             <div className="flex items-center space-x-2 mb-4">
               <ChefHat className="w-8 h-8 text-golden-rice" />
-              <h3 className="text-2xl font-bold">Ambur Briyani</h3>
+              <h3 className="text-2xl font-bold">Original Ambur Briyani</h3>
             </div>
             <p className="text-background/80 mb-6 leading-relaxed">
               Authentic South Indian flavors served with love since 1999. 
@@ -112,7 +112,7 @@ const Footer = () => {
         {/* Bottom Footer */}
         <div className="py-6 flex flex-col md:flex-row justify-between items-center">
           <div className="text-background/80 text-sm mb-4 md:mb-0">
-            © 2024 Ambur Briyani. All rights reserved. 
+            © 2024 Original Ambur Briyani. All rights reserved.
             <span className="inline-flex items-center ml-2">
               Made with <Heart className="w-4 h-4 text-red-500 mx-1" /> for food lovers
             </span>
