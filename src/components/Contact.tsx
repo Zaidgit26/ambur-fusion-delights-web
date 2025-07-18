@@ -38,14 +38,14 @@ const Contact = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16 fade-in-up">
-          <Badge variant="secondary" className="mb-4 text-primary">
+          <Badge variant="secondary" className="mb-4 text-primary font-poppins">
             Get In Touch
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+          <h2 className="text-4xl md:text-5xl font-poppins-bold text-foreground mb-4">
             Visit Us or Order Online
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Ready to experience the authentic flavors of Ambur? Contact us for reservations, 
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-poppins">
+            Ready to experience the authentic flavors of Ambur? Contact us for reservations,
             online orders, or any special requests. We're here to serve you!
           </p>
         </div>
@@ -53,7 +53,7 @@ const Contact = () => {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Info */}
           <div className="fade-in-left">
-            <h3 className="text-3xl font-bold text-foreground mb-8">
+            <h3 className="text-3xl font-poppins-bold text-foreground mb-8">
               Contact Information
             </h3>
             
@@ -65,16 +65,16 @@ const Contact = () => {
                       <div className="bg-primary/10 p-2 rounded-lg text-primary">
                         {info.icon}
                       </div>
-                      <h4 className="font-semibold text-foreground">{info.title}</h4>
+                      <h4 className="font-poppins-medium text-foreground">{info.title}</h4>
                     </div>
                     <div className="space-y-1 mb-4">
                       {info.details.map((detail, idx) => (
-                        <p key={idx} className="text-muted-foreground text-sm">
+                        <p key={idx} className="text-muted-foreground text-sm font-poppins">
                           {detail}
                         </p>
                       ))}
                     </div>
-                    <Button variant="outline" size="sm" className="text-xs">
+                    <Button variant="outline" size="sm" className="text-xs font-poppins">
                       {info.action}
                     </Button>
                   </CardContent>
@@ -85,15 +85,15 @@ const Contact = () => {
             {/* Quick Actions */}
             <Card className="border-none shadow-warm bg-gradient-warm">
               <CardContent className="p-6">
-                <h4 className="text-xl font-bold text-foreground mb-4">
+                <h4 className="text-xl font-poppins-bold text-foreground mb-4">
                   Quick Actions
                 </h4>
                 <div className="grid grid-cols-2 gap-4">
-                  <Button variant="hero" className="glow-on-hover">
+                  <Button variant="hero" className="glow-on-hover font-poppins-medium">
                     <Phone className="w-4 h-4 mr-2" />
                     Call to Order
                   </Button>
-                  <Button variant="spice" className="glow-on-hover">
+                  <Button variant="spice" className="glow-on-hover font-poppins-medium">
                     <MessageCircle className="w-4 h-4 mr-2" />
                     WhatsApp
                   </Button>
@@ -106,70 +106,70 @@ const Contact = () => {
           <div className="fade-in-right">
             <Card className="border-none shadow-warm bg-card/50 backdrop-blur-sm">
               <CardContent className="p-8">
-                <h3 className="text-3xl font-bold text-foreground mb-6">
+                <h3 className="text-3xl font-poppins-bold text-foreground mb-6">
                   Send us a Message
                 </h3>
                 
                 <form className="space-y-6">
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
+                      <label htmlFor="name" className="block text-sm font-poppins-medium text-foreground mb-2">
                         Your Name
                       </label>
-                      <Input 
-                        id="name" 
-                        placeholder="Enter your name" 
-                        className="bg-background/50"
+                      <Input
+                        id="name"
+                        placeholder="Enter your name"
+                        className="bg-background/50 font-poppins"
                       />
                     </div>
                     <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
+                      <label htmlFor="phone" className="block text-sm font-poppins-medium text-foreground mb-2">
                         Phone Number
                       </label>
-                      <Input 
-                        id="phone" 
-                        placeholder="Enter your phone" 
-                        className="bg-background/50"
+                      <Input
+                        id="phone"
+                        placeholder="Enter your phone"
+                        className="bg-background/50 font-poppins"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
+                    <label htmlFor="email" className="block text-sm font-poppins-medium text-foreground mb-2">
                       Email Address
                     </label>
-                    <Input 
-                      id="email" 
-                      type="email" 
-                      placeholder="Enter your email" 
-                      className="bg-background/50"
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="Enter your email"
+                      className="bg-background/50 font-poppins"
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">
+                    <label htmlFor="subject" className="block text-sm font-poppins-medium text-foreground mb-2">
                       Subject
                     </label>
-                    <Input 
-                      id="subject" 
-                      placeholder="What is this about?" 
-                      className="bg-background/50"
+                    <Input
+                      id="subject"
+                      placeholder="What is this about?"
+                      className="bg-background/50 font-poppins"
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
+                    <label htmlFor="message" className="block text-sm font-poppins-medium text-foreground mb-2">
                       Message
                     </label>
-                    <Textarea 
-                      id="message" 
-                      placeholder="Tell us how we can help you..." 
+                    <Textarea
+                      id="message"
+                      placeholder="Tell us how we can help you..."
                       rows={5}
-                      className="bg-background/50"
+                      className="bg-background/50 font-poppins"
                     />
                   </div>
 
-                  <Button variant="hero" size="lg" className="w-full glow-on-hover">
+                  <Button variant="hero" size="lg" className="w-full glow-on-hover font-poppins-medium">
                     Send Message
                   </Button>
                 </form>
@@ -182,16 +182,16 @@ const Contact = () => {
         <div className="mt-16 fade-in-up">
           <Card className="border-none shadow-warm bg-gradient-warm">
             <CardContent className="p-8 text-center">
-              <h3 className="text-2xl font-bold text-foreground mb-4">
+              <h3 className="text-2xl font-poppins-bold text-foreground mb-4">
                 Find Us on the Map
               </h3>
               <div className="bg-muted/30 h-64 rounded-lg flex items-center justify-center">
                 <div className="text-center">
                   <MapPin className="w-12 h-12 text-primary mx-auto mb-4" />
-                  <p className="text-muted-foreground">
+                  <p className="text-muted-foreground font-poppins">
                     Interactive map integration coming soon
                   </p>
-                  <Button variant="outline" className="mt-4">
+                  <Button variant="outline" className="mt-4 font-poppins-medium">
                     Get Directions via Google Maps
                   </Button>
                 </div>

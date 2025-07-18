@@ -1,72 +1,138 @@
 import heroImage from "@/assets/hero-biryani.jpg";
+import logo from "@/assets/logo.png";
+import textLogo from "@/assets/TEXTLOGO.png";
 import { Button } from "@/components/ui/button";
 
 const Hero = () => {
+  // Navigation handlers
+  const scrollToSection = (sectionId: string) => {
+    const element = document.querySelector(sectionId);
+    if (element) {
+      const navbarHeight = 80;
+      const offsetTop = (element as HTMLElement).offsetTop - navbarHeight;
+
+      window.scrollTo({
+        top: Math.max(0, offsetTop),
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const handleMenuClick = () => {
+    scrollToSection('#menu');
+  };
+
+  const handleOrderClick = () => {
+    // For now, scroll to contact section for ordering
+    // This can be updated to open an order modal or redirect to ordering system
+    scrollToSection('#contact');
+  };
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Direct Video Background Implementation */}
+      {/* Video Background - Fixed Implementation */}
       <div className="absolute inset-0">
-        {/* Fallback Background Image with Animation */}
+        {/* Fallback Background Image */}
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-slow-zoom"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroImage})` }}
         />
 
         {/* Video Background */}
         <video
-          className="absolute inset-0 w-full h-full object-cover opacity-80"
+          className="absolute inset-0 w-full h-full object-cover"
           autoPlay
           muted
           loop
           playsInline
-          preload="auto"
-          onLoadStart={() => console.log('Video load start')}
-          onLoadedData={() => {
-            console.log('Video loaded successfully');
-            // Make video visible when loaded
-            const video = document.querySelector('video');
-            if (video) video.style.opacity = '1';
-          }}
+          preload="metadata"
+          style={{ opacity: 0.9 }}
           onError={(e) => {
-            console.error('Video error:', e);
-            console.error('Video src:', (e.target as HTMLVideoElement)?.src);
+            console.error('Video loading error:', e);
+            // Hide video on error, fallback image will show
+            e.currentTarget.style.display = 'none';
           }}
-          onCanPlay={() => console.log('Video can play')}
-          onCanPlayThrough={() => console.log('Video can play through')}
-          style={{ opacity: 0, transition: 'opacity 0.5s ease-in-out' }}
+          onLoadedData={(e) => {
+            console.log('Video loaded successfully');
+            e.currentTarget.style.opacity = '0.9';
+          }}
         >
           <source src="/video/hero.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
 
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-black/50 to-black/40" />
+        {/* Enhanced Overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/75 to-black/65" />
       </div>
 
+      {/* Mobile Centered Logos */}
+      <div className="block md:hidden absolute top-4 left-1/2 transform -translate-x-1/2 z-20">
+        {/* AB Star Logo - Mobile Center Top */}
+        <div className="flex justify-center mb-3">
+          <div className="w-16 h-16">
+            <img
+              src={logo}
+              alt="Original Ambur Briyani Logo"
+              className="w-full h-full object-contain drop-shadow-lg hover:scale-105 transition-transform duration-300"
+              onError={(e) => {
+                // Fallback to a default image or hide if logo fails to load
+                const target = e.currentTarget as HTMLImageElement;
+                target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23ED1B24'/%3E%3Ctext x='32' y='40' text-anchor='middle' fill='white' font-size='24'%3E🍛%3C/text%3E%3C/svg%3E";
+              }}
+            />
+          </div>
+        </div>
 
+        {/* Text Logo - Mobile Center Below */}
+        <div className="flex justify-center">
+          <div className="w-40 h-auto">
+            <img
+              src={textLogo}
+              alt="Original Ambur Briyani Deluxe - Since 1967"
+              className="w-full h-full object-contain drop-shadow-lg hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+        </div>
+      </div>
 
-      {/* Top Right Restaurant Name */}
-      <div className="absolute top-8 right-8 z-20 text-right">
-        <h2 className="font-spirax text-2xl md:text-3xl text-white mb-1">
-          Original Ambur Briyani
-        </h2>
-        <p className="font-spirax text-lg md:text-xl text-golden-rice">
-          Deluxe
-        </p>
-        <p className="font-poppins text-sm text-white/80 mt-1">
-          Since 1967
-        </p>
+      {/* Desktop/Tablet Corner Logos */}
+      <div className="hidden md:block">
+        {/* Top Left Logo */}
+        <div className="absolute top-8 left-8 z-20">
+          <div className="w-20 h-20 lg:w-24 lg:h-24">
+            <img
+              src={logo}
+              alt="Original Ambur Briyani Logo"
+              className="w-full h-full object-contain drop-shadow-lg hover:scale-105 transition-transform duration-300"
+              onError={(e) => {
+                // Fallback to a default image or hide if logo fails to load
+                const target = e.currentTarget as HTMLImageElement;
+                target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Ccircle cx='48' cy='48' r='45' fill='%23ED1B24'/%3E%3Ctext x='48' y='58' text-anchor='middle' fill='white' font-size='32'%3E🍛%3C/text%3E%3C/svg%3E";
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Top Right Text Logo */}
+        <div className="absolute top-8 right-8 z-20">
+          <div className="w-56 lg:w-64 xl:w-72 2xl:w-80 h-auto">
+            <img
+              src={textLogo}
+              alt="Original Ambur Briyani Deluxe - Since 1967"
+              className="w-full h-full object-contain drop-shadow-lg hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+        </div>
       </div>
 
       {/* Center Content */}
-      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+      <div className="relative z-10 text-center px-4 max-w-6xl mx-auto">
         {/* Main Title */}
-        <h1 className="font-spirax text-4xl md:text-6xl lg:text-7xl text-white mb-4 leading-tight">
+        <h1 className="font-spirax text-3xl sm:text-6xl md:text-7xl lg:text-6xl xl:text-8xl text-white mb-6 leading-tight">
           The taste of authentic
         </h1>
 
         {/* Subtitle */}
-        <h2 className="font-spirax text-3xl md:text-4xl lg:text-5xl text-red-500 mb-12">
+        <h2 className="font-spirax text-2xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-6xl mb-12 leading-tight" style={{ color: '#ED1B24' }}>
           Ambur Briyani
         </h2>
 
@@ -75,14 +141,39 @@ const Hero = () => {
           <Button
             variant="outline"
             size="lg"
-            className="font-poppins-medium bg-transparent border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-8 py-3 rounded-lg transition-all duration-300 min-w-[140px]"
+            onClick={handleMenuClick}
+            className="font-poppins-medium bg-transparent border-2 text-white px-8 py-3 rounded-lg transition-all duration-300 min-w-[140px]"
+            style={{
+              borderColor: '#ED1B24',
+              color: '#ED1B24',
+              '--hover-bg': '#ED1B24'
+            } as React.CSSProperties}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#ED1B24';
+              e.currentTarget.style.color = 'white';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = '#ED1B24';
+            }}
           >
             MENU
           </Button>
 
           <Button
             size="lg"
-            className="font-poppins-medium bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg transition-all duration-300 min-w-[140px]"
+            onClick={handleOrderClick}
+            className="font-poppins-medium text-white px-8 py-3 rounded-lg transition-all duration-300 min-w-[140px]"
+            style={{
+              backgroundColor: '#ED1B24',
+              '--hover-bg': '#C41620'
+            } as React.CSSProperties}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#C41620';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#ED1B24';
+            }}
           >
             ORDER ONLINE
           </Button>
