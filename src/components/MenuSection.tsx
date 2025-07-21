@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, memo, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Star, Plus, ShoppingCart } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
+import { Star } from "lucide-react";
+import { useDevicePerformance, useOptimizedImage } from "@/hooks/usePerformanceOptimization";
+import { useResponsiveBreakpoints } from "@/hooks/useResponsiveBreakpoints";
+import { useReactOptimizations } from "@/hooks/useReactOptimizations";
 
 interface MenuItem {
   id: string;
@@ -18,9 +20,112 @@ interface MenuItem {
   isPopular: boolean;
 }
 
-const MenuSection = () => {
+// Performance-optimized menu item component with React optimizations
+const MenuItemCard = memo(({ item, shouldReduceAnimations }: {
+  item: MenuItem;
+  shouldReduceAnimations: boolean;
+}) => {
+  const { src: optimizedImage, ref: imageRef } = useOptimizedImage(
+    item.image,
+    { lazy: true, quality: 'medium' }
+  );
+
+  // Performance optimization hooks
+  const responsive = useResponsiveBreakpoints();
+  const { memoizedStyles } = useReactOptimizations();
+
+
+
+  // Memoized styles with proper typing
+  const cardStyles = useMemo(() => ({
+    ...memoizedStyles.gpuAccelerated,
+    touchAction: 'manipulation' as const,
+    WebkitTouchCallout: 'none' as const,
+    WebkitUserSelect: 'none' as const,
+    userSelect: 'none' as const,
+    ...memoizedStyles.reducedMotion
+  }), [memoizedStyles]);
+
+  return (
+    <Card
+      className={`border-none shadow-warm bg-card/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300 group overflow-hidden menu-card-hover ${
+        shouldReduceAnimations ? '' : 'hover:scale-[1.02]'
+      }`}
+      style={cardStyles}
+    >
+      <div className="relative overflow-hidden">
+        <img
+          ref={imageRef as React.RefObject<HTMLImageElement>}
+          src={optimizedImage}
+          alt={item.name}
+          className={`w-full ${
+            responsive.isMobile ? 'h-20' : 'h-24 sm:h-32 md:h-40'
+          } object-cover transition-transform duration-300 ${
+            shouldReduceAnimations ? '' : 'group-hover:scale-110'
+          }`}
+          loading="lazy"
+          decoding="async"
+        />
+
+        {/* Badges - Simplified for mobile */}
+        <div className="absolute top-2 left-2 flex gap-1">
+          {item.isPopular && (
+            <Badge className="bg-primary text-white font-poppins text-xs px-1 py-0.5">
+              Popular
+            </Badge>
+          )}
+          {item.isVeg && (
+            <Badge className="bg-secondary text-white font-poppins text-xs px-1 py-0.5">
+              Veg
+            </Badge>
+          )}
+          {item.isSpicy && (
+            <Badge className="bg-red-600 text-white font-poppins text-xs px-1 py-0.5">
+              🌶️
+            </Badge>
+          )}
+        </div>
+
+        {/* Rating - Hidden on mobile, visible on larger screens */}
+        <div className="absolute top-2 right-2 bg-black/70 text-white px-1.5 py-0.5 rounded-full items-center gap-1 hidden sm:flex">
+          <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+          <span className="text-xs font-poppins">{item.rating}</span>
+        </div>
+      </div>
+
+      <CardContent className={`${responsive.isMobile ? 'p-2' : 'p-2 sm:p-3 md:p-4'}`}>
+        {/* Title - Mobile optimized sizing */}
+        <h3 className={`font-poppins-bold ${
+          responsive.isMobile ? 'text-xs' : 'text-sm sm:text-base md:text-lg'
+        } text-foreground mb-1 group-hover:text-primary transition-colors line-clamp-2`}>
+          {item.name}
+        </h3>
+
+        {/* Description - Hidden on mobile for compact design */}
+        <p className="text-muted-foreground text-xs mb-2 font-poppins leading-relaxed line-clamp-2 hidden sm:block">
+          {item.description}
+        </p>
+
+        {/* Price and Add Button - Mobile optimized layout */}
+        <div className={`flex items-center ${responsive.isMobile ? 'justify-between' : 'justify-between'} gap-2`}>
+          <span className={`font-poppins-bold ${
+            responsive.isMobile ? 'text-sm' : 'text-sm sm:text-lg md:text-xl'
+          } text-primary flex-shrink-0`}>
+            ₹{item.price}
+          </span>
+
+
+        </div>
+      </CardContent>
+    </Card>
+  );
+});
+
+const MenuSection = memo(() => {
   const [activeCategory, setActiveCategory] = useState("all");
-  const { state: cartState, addItem, openCart } = useCart();
+  const { shouldReduceAnimations } = useDevicePerformance();
+  const responsive = useResponsiveBreakpoints();
+  // Removed unused hooks to fix React Hook violations
 
   const categories = [
     { id: "all", name: "All Items", icon: "🍽️" },
@@ -130,25 +235,13 @@ const MenuSection = () => {
     }
   ];
 
-  const filteredItems = activeCategory === "all"
-    ? menuItems
-    : menuItems.filter(item => item.category === activeCategory);
+  // Memoized filtered items to prevent unnecessary re-renders
+  const filteredItems = useMemo(() => {
+    if (activeCategory === "all") return menuItems;
+    return menuItems.filter(item => item.category === activeCategory);
+  }, [activeCategory, menuItems]);
 
-  const handleAddToCart = (item: MenuItem) => {
-    addItem({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      image: item.image,
-      isVeg: item.isVeg,
-      category: item.category,
-    });
-  };
 
-  const getItemQuantity = (itemId: string) => {
-    const cartItem = cartState.items.find(item => item.id === itemId);
-    return cartItem ? cartItem.quantity : 0;
-  };
 
   return (
     <section id="menu" className="py-20 bg-gradient-to-br from-background via-background/95 to-muted/30 relative overflow-hidden">
@@ -196,104 +289,28 @@ const MenuSection = () => {
           ))}
         </div>
 
-        {/* Menu Grid - Redesigned for compact mobile layout */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-12">
-          {filteredItems.map((item, index) => (
-            <Card
+        {/* Menu Grid - Mobile-optimized spacing and layout */}
+        <div className={`grid mb-12 ${
+          responsive.isMobile
+            ? 'grid-cols-2 gap-2'
+            : 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6'
+        }`}>
+          {filteredItems.map((item) => (
+            <MenuItemCard
               key={item.id}
-              className="border-none shadow-warm bg-card/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group overflow-hidden menu-card-hover"
-              style={{ animationDelay: `${index * 50}ms` }}
-            >
-              <div className="relative overflow-hidden">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-full h-24 sm:h-32 md:h-40 object-cover transition-transform duration-300 group-hover:scale-110"
-                  loading="lazy"
-                  decoding="async"
-                />
-
-                {/* Badges - Simplified for mobile */}
-                <div className="absolute top-2 left-2 flex gap-1">
-                  {item.isPopular && (
-                    <Badge className="bg-primary text-white font-poppins text-xs px-1 py-0.5">
-                      Popular
-                    </Badge>
-                  )}
-                  {item.isVeg && (
-                    <Badge className="bg-secondary text-white font-poppins text-xs px-1 py-0.5">
-                      Veg
-                    </Badge>
-                  )}
-                  {item.isSpicy && (
-                    <Badge className="bg-red-600 text-white font-poppins text-xs px-1 py-0.5">
-                      🌶️
-                    </Badge>
-                  )}
-                </div>
-
-                {/* Rating - Hidden on mobile, visible on larger screens */}
-                <div className="absolute top-2 right-2 bg-black/70 text-white px-1.5 py-0.5 rounded-full items-center gap-1 hidden sm:flex">
-                  <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                  <span className="text-xs font-poppins">{item.rating}</span>
-                </div>
-              </div>
-
-              <CardContent className="p-2 sm:p-3 md:p-4">
-                <h3 className="font-poppins-bold text-sm sm:text-base md:text-lg text-foreground mb-1 group-hover:text-primary transition-colors line-clamp-2">
-                  {item.name}
-                </h3>
-
-                {/* Description - Hidden on mobile for compact design */}
-                <p className="text-muted-foreground text-xs mb-2 font-poppins leading-relaxed line-clamp-2 hidden sm:block">
-                  {item.description}
-                </p>
-
-                <div className="flex items-center justify-between">
-                  <span className="font-poppins-bold text-sm sm:text-lg md:text-xl text-primary">
-                    ₹{item.price}
-                  </span>
-
-                  <div className="flex items-center gap-1">
-                    {getItemQuantity(item.id) > 0 && (
-                      <Badge variant="secondary" className="font-poppins text-xs px-1 py-0.5">
-                        {getItemQuantity(item.id)}
-                      </Badge>
-                    )}
-                    <Button
-                      onClick={() => handleAddToCart(item)}
-                      size="sm"
-                      className="bg-primary hover:bg-primary/80 text-white font-poppins-medium transition-all duration-300 hover:scale-105 text-xs px-2 py-1 sm:px-3 sm:py-2 shadow-md hover:shadow-lg border border-primary/20 hover:border-primary/40"
-                    >
-                      <Plus className="w-3 h-3 mr-0.5 sm:mr-1" />
-                      <span className="hidden sm:inline">Add</span>
-                      <span className="sm:hidden">+</span>
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+              item={item}
+              shouldReduceAnimations={shouldReduceAnimations}
+            />
           ))}
         </div>
 
-        {/* Cart Summary & Order Button */}
-        {cartState.totalItems > 0 && (
-          <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 fade-in-up">
-            <Button
-              onClick={openCart}
-              size="lg"
-              className="bg-primary hover:bg-primary/90 text-white font-poppins-medium shadow-2xl hover:scale-105 transition-all duration-300 text-sm sm:text-base px-4 py-3 sm:px-6 sm:py-4"
-            >
-              <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-              <span className="hidden xs:inline">View Cart </span>
-              <span className="xs:hidden">Cart </span>
-              ({cartState.totalItems})
-            </Button>
-          </div>
-        )}
+
       </div>
     </section>
   );
-};
+});
+
+// Set display name for debugging
+MenuSection.displayName = 'MenuSection';
 
 export default MenuSection;

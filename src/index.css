@@ -515,30 +515,13 @@
     isolation: isolate;
   }
 
-  /* Cart Dropdown Glassmorphism Styling */
+  /* Glassmorphism Styling */
   .backdrop-blur-20 {
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
   }
 
-  /* Enhanced scrollbar styling for cart */
-  .cart-scrollbar::-webkit-scrollbar {
-    width: 4px;
-  }
 
-  .cart-scrollbar::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
-  }
-
-  .cart-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(237, 27, 36, 0.5);
-    border-radius: 2px;
-  }
-
-  .cart-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(237, 27, 36, 0.7);
-  }
 
   /* Reduced motion support */
   @media (prefers-reduced-motion: reduce) {
@@ -669,5 +652,181 @@
   }
   75% {
     transform: translateY(-5px) rotate(-5deg);
+  }
+}
+
+/* Custom Scrollbar Styles for Cart Dropdown */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db #f3f4f6;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+
+
+/* 60fps Mobile Performance Optimizations */
+@media (max-width: 768px) {
+  /* GPU acceleration for all interactive elements */
+  .mobile-optimized {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform, opacity;
+  }
+
+  /* Touch device optimizations */
+  .touch-device {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+  }
+
+  /* Low-end device optimizations */
+  .low-end-device {
+    contain: layout style paint;
+    isolation: isolate;
+  }
+
+  /* Reduce animations on mobile for 60fps */
+  .reduce-motion,
+  .reduce-motion * {
+    animation-duration: 0.05s !important;
+    transition-duration: 0.05s !important;
+    animation-fill-mode: both !important;
+  }
+
+  /* Optimize font rendering for mobile */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeSpeed;
+    font-display: swap;
+  }
+
+  /* Reduce blur effects on mobile for performance */
+  .backdrop-blur-sm {
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  .backdrop-blur-md {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  /* Optimize scrolling performance */
+  .mobile-scroll-optimized {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scroll-behavior: smooth;
+  }
+
+  /* Hardware acceleration for animations */
+  .mobile-animate {
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+  }
+}
+
+/* Screen-specific optimizations for 60fps performance */
+
+/* 320px - Small mobile devices (iPhone SE) */
+@media (max-width: 320px) {
+  .mobile-optimized {
+    font-size: 0.875rem;
+  }
+
+  .menu-card-hover {
+    transition-duration: 0.1s;
+  }
+
+  .backdrop-blur-sm,
+  .backdrop-blur-md {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* 375px - iPhone SE, iPhone 12 mini */
+@media (min-width: 321px) and (max-width: 375px) {
+  .mobile-optimized {
+    font-size: 0.9rem;
+  }
+
+  .menu-card-hover {
+    transition-duration: 0.15s;
+  }
+}
+
+/* 414px - iPhone 11 Pro Max, iPhone 12 Pro Max */
+@media (min-width: 376px) and (max-width: 414px) {
+  .mobile-optimized {
+    font-size: 1rem;
+  }
+
+  .menu-card-hover {
+    transition-duration: 0.2s;
+  }
+}
+
+/* 768px - Tablets */
+@media (min-width: 415px) and (max-width: 768px) {
+  .mobile-optimized {
+    font-size: 1.1rem;
+  }
+
+  .menu-card-hover {
+    transition-duration: 0.25s;
+  }
+
+  /* Enable more effects on larger mobile screens */
+  .backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .backdrop-blur-md {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+/* Modal Positioning - Now handled via inline styles for better control */
+
+/* Accessibility and reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .mobile-optimized,
+  .menu-card-hover,
+  .mobile-animate {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .mobile-optimized {
+    border: 2px solid;
+    background: white;
+    color: black;
   }
 }

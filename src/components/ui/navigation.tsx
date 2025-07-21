@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, memo, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, UtensilsCrossed, Phone, Menu, X, ShoppingCart } from 'lucide-react';
+import { Home, UtensilsCrossed, Phone, Menu, X } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { useScrollOptimized, useSmoothScroll, useFocusTrap } from '@/hooks/useScrollOptimized';
-import { useCart } from '@/contexts/CartContext';
-import CartDropdown from './cart-dropdown';
+import { useOptimizedAnimations, useGPUAcceleration } from '@/hooks/useAnimationOptimization';
+import { useResponsiveClasses, useTouchTargets } from '@/hooks/useResponsiveBreakpoints';
 
 // TypeScript interfaces for better type safety
 interface NavigationItem {
@@ -53,82 +53,27 @@ const navigationItems: NavigationItem[] = [
   }
 ];
 
-// Animation variants for better performance and consistency
-const navbarVariants = {
-  hidden: { y: -100, opacity: 0 },
-  visible: { 
-    y: 0, 
-    opacity: 1,
-    transition: { 
-      duration: 0.6, 
-      ease: [0.4, 0, 0.2, 1] // Custom easing curve
-    }
-  },
-  exit: { 
-    y: -100, 
-    opacity: 0,
-    transition: { duration: 0.4 }
-  }
-};
-
-const logoVariants = {
-  idle: { scale: 1, rotate: 0 },
-  hover: { 
-    scale: 1.05, 
-    rotate: 5,
-    transition: { duration: 0.3, ease: "easeOut" }
-  },
-  tap: { scale: 0.98 }
-};
-
-const menuButtonVariants = {
-  idle: { scale: 1 },
-  hover: { 
-    scale: 1.05,
-    transition: { duration: 0.2 }
-  },
-  tap: { scale: 0.95 }
-};
-
-const mobileMenuVariants = {
+// Performance-optimized animation variants with GPU acceleration
+const createMobileMenuItemVariants = (shouldReduceAnimations: boolean) => ({
   closed: {
     opacity: 0,
-    height: 0,
+    x: shouldReduceAnimations ? 0 : -10,
     transition: {
-      duration: 0.4,
-      ease: [0.4, 0, 0.2, 1],
-      when: "afterChildren"
+      duration: shouldReduceAnimations ? 0.05 : 0.15,
+      ease: "easeOut" as const
     }
-  },
-  open: {
-    opacity: 1,
-    height: "auto",
-    transition: {
-      duration: 0.5,
-      ease: [0.4, 0, 0.2, 1],
-      when: "beforeChildren",
-      staggerChildren: 0.1
-    }
-  }
-};
-
-const mobileMenuItemVariants = {
-  closed: {
-    opacity: 0,
-    x: -20,
-    transition: { duration: 0.2 }
   },
   open: {
     opacity: 1,
     x: 0,
     transition: {
-      duration: 0.3,
-      ease: [0.4, 0, 0.2, 1]
+      duration: shouldReduceAnimations ? 0.05 : 0.2,
+      ease: shouldReduceAnimations ? "linear" as const : [0.4, 0, 0.2, 1] as const
     }
   }
-};
+});
 
-const Navigation: React.FC<NavigationProps> = ({ className = "", onNavigate }) => {
+const Navigation: React.FC<NavigationProps> = memo(({ className = "", onNavigate }) => {
   // State management with proper typing
   const [state, setState] = useState<NavigationState>({
     activeItem: 'home',
@@ -138,12 +83,29 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", onNavigate }) =
     isNavigating: false
   });
 
-  // Optimized hooks
+  // Performance and optimization hooks
   const { scrollToElement, scrollToTop, enhancedScrollToElement } = useSmoothScroll();
   const focusTrapRef = useFocusTrap(state.isMenuOpen);
-  const { state: cartState, toggleCart } = useCart();
+  const {
+    navigationVariants,
+    mobileMenuVariants,
+    buttonVariants,
+    shouldReduceAnimations
+  } = useOptimizedAnimations();
+  const { getGPUStyles } = useGPUAcceleration();
+  const { getNavClasses } = useResponsiveClasses();
+  const { getTouchTargetClasses } = useTouchTargets();
 
-  // Enhanced scroll handler with section-based visibility
+  // Create optimized variants for mobile menu items
+  const optimizedMobileMenuItemVariants = useMemo(() =>
+    createMobileMenuItemVariants(shouldReduceAnimations),
+    [shouldReduceAnimations]
+  );
+
+  // GPU-accelerated styles
+  const gpuStyles = useMemo(() => getGPUStyles(!shouldReduceAnimations), [getGPUStyles, shouldReduceAnimations]);
+
+  // Enhanced scroll handler with section-based visibility and performance optimization
   useScrollOptimized(
     useCallback((scrollState) => {
       // Determine if we should show the navbar based on current section
@@ -154,7 +116,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", onNavigate }) =
 
       if (heroSection && menuSection) {
         const heroHeight = heroSection.getBoundingClientRect().height;
-        const heroBottom = heroSection.offsetTop + heroHeight;
+        const heroBottom = (heroSection as HTMLElement).offsetTop + heroHeight;
 
         // Show navbar only when user has scrolled past the hero section
         // Add a small buffer (100px) to ensure smooth transition
@@ -170,7 +132,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", onNavigate }) =
         isVisible: shouldShowNavbar
       }));
     }, []),
-    { threshold: 50, throttleMs: 16 }
+    { threshold: 50, throttleMs: shouldReduceAnimations ? 50 : 16 } // Adjust throttling based on performance
   );
 
   // Navigation click handler with enhanced mobile scrolling
@@ -230,9 +192,9 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", onNavigate }) =
   if (!state.isVisible) return null;
 
   return (
-    <AnimatePresence>
+    <div>
       <motion.nav
-        variants={navbarVariants}
+        variants={navigationVariants}
         initial="hidden"
         animate="visible"
         exit="exit"
@@ -241,6 +203,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", onNavigate }) =
             ? 'navbar-scrolled-glass'
             : 'navbar-glass-morphism'
         } ${className}`}
+        style={getGPUStyles()}
         role="navigation"
         aria-label="Main navigation"
       >
@@ -250,10 +213,11 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", onNavigate }) =
             <motion.div
               className="flex items-center space-x-2 cursor-pointer"
               onClick={() => handleNavigation(navigationItems[0], false)}
-              variants={logoVariants}
+              variants={buttonVariants}
               initial="idle"
               whileHover="hover"
               whileTap="tap"
+              style={getGPUStyles()}
               role="button"
               tabIndex={0}
               aria-label="Original Ambur Briyani - Go to home"
@@ -346,7 +310,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", onNavigate }) =
                         className="absolute inset-0 rounded-xl"
                         variants={{
                           hover: {
-                            background: "rgba(237, 27, 36, 0.15)",
+                            backgroundColor: "rgba(237, 27, 36, 0.15)",
                             backdropFilter: "blur(8px)"
                           }
                         }}
@@ -384,125 +348,17 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", onNavigate }) =
                 );
               })}
 
-              {/* Shopping Cart Icon */}
-              <motion.div
-                className="relative"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: navigationItems.length * 0.1 }}
-              >
-                <motion.button
-                  onClick={toggleCart}
-                  className="relative px-3 py-2 rounded-xl font-poppins-medium text-sm focus:outline-none overflow-hidden"
-                  whileHover="hover"
-                  whileTap="tap"
-                  variants={{
-                    hover: { scale: 1.02 },
-                    tap: { scale: 0.98 }
-                  }}
-                  aria-label={`Shopping cart with ${cartState.totalItems} items`}
-                >
-                  {/* Hover background */}
-                  <motion.div
-                    className="absolute inset-0 rounded-xl"
-                    variants={{
-                      hover: {
-                        background: "rgba(237, 27, 36, 0.15)",
-                        backdropFilter: "blur(8px)"
-                      }
-                    }}
-                    transition={{ duration: 0.3 }}
-                  />
 
-                  {/* Content */}
-                  <div className="relative z-10 flex items-center space-x-2">
-                    <motion.div
-                      className="relative"
-                      variants={{
-                        hover: { color: "#ED1B24" }
-                      }}
-                      transition={{ duration: 0.3, ease: "easeOut" }}
-                      style={{ color: "rgba(255, 255, 255, 0.9)" }}
-                    >
-                      <ShoppingCart size={18} />
-                      {cartState.totalItems > 0 && (
-                        <motion.div
-                          className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-poppins-bold"
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        >
-                          {cartState.totalItems > 99 ? '99+' : cartState.totalItems}
-                        </motion.div>
-                      )}
-                    </motion.div>
-                    <motion.span
-                      className="font-poppins-medium"
-                      variants={{
-                        hover: { color: "#ED1B24" }
-                      }}
-                      transition={{ duration: 0.3, ease: "easeOut" }}
-                      style={{ color: "rgba(255, 255, 255, 0.9)" }}
-                    >
-                      Cart
-                    </motion.span>
-                  </div>
-                </motion.button>
-              </motion.div>
             </div>
 
             {/* Mobile Actions */}
             <div className="md:hidden flex items-center space-x-2">
-              {/* Mobile Cart Button */}
-              <motion.button
-                onClick={toggleCart}
-                className="relative p-2 rounded-xl focus:outline-none overflow-hidden"
-                variants={menuButtonVariants}
-                initial="idle"
-                whileHover="hover"
-                whileTap="tap"
-                aria-label={`Shopping cart with ${cartState.totalItems} items`}
-              >
-                {/* Hover background */}
-                <motion.div
-                  className="absolute inset-0 rounded-xl"
-                  variants={{
-                    hover: {
-                      background: "rgba(237, 27, 36, 0.15)",
-                      backdropFilter: "blur(8px)"
-                    }
-                  }}
-                  transition={{ duration: 0.3 }}
-                />
-
-                {/* Cart Icon */}
-                <motion.div
-                  className="relative z-10"
-                  variants={{
-                    hover: { color: "#ED1B24" }
-                  }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  style={{ color: "rgba(255, 255, 255, 0.9)" }}
-                >
-                  <ShoppingCart size={20} />
-                  {cartState.totalItems > 0 && (
-                    <motion.div
-                      className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-poppins-bold"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    >
-                      {cartState.totalItems > 9 ? '9+' : cartState.totalItems}
-                    </motion.div>
-                  )}
-                </motion.div>
-              </motion.button>
 
               {/* Mobile Menu Button */}
               <motion.button
                 onClick={toggleMobileMenu}
                 className="relative p-2 rounded-xl focus:outline-none overflow-hidden"
-                variants={menuButtonVariants}
+                variants={buttonVariants}
                 initial="idle"
                 whileHover="hover"
                 whileTap="tap"
@@ -515,7 +371,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", onNavigate }) =
                   className="absolute inset-0 rounded-xl"
                   variants={{
                     hover: {
-                      background: "rgba(237, 27, 36, 0.15)",
+                      backgroundColor: "rgba(237, 27, 36, 0.15)",
                       backdropFilter: "blur(8px)"
                     }
                   }}
@@ -537,28 +393,34 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", onNavigate }) =
             </div>
           </div>
 
-          {/* Mobile Menu */}
-          <AnimatePresence>
+          {/* Mobile Menu - Performance Optimized */}
+          <AnimatePresence mode="wait">
             {state.isMenuOpen && (
               <motion.div
+                key="mobile-menu"
                 id="mobile-menu"
-                ref={focusTrapRef}
+                ref={focusTrapRef as React.RefObject<HTMLDivElement>}
                 variants={mobileMenuVariants}
                 initial="closed"
                 animate="open"
                 exit="closed"
                 className="md:hidden overflow-hidden border-t border-white/10 backdrop-blur-sm"
+                style={{
+                  ...gpuStyles,
+                  contain: 'layout style paint'
+                }}
                 role="menu"
               >
                 <div className="px-4 py-3 space-y-2">
-                  {navigationItems.map((item, index) => {
+                  {navigationItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = state.activeItem === item.id;
 
                     return (
                       <motion.div
                         key={item.id}
-                        variants={mobileMenuItemVariants}
+                        variants={optimizedMobileMenuItemVariants}
+                        style={gpuStyles}
                       >
                         <motion.button
                           onClick={() => handleNavigation(item, true)}
@@ -586,7 +448,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", onNavigate }) =
                             className="absolute inset-0 rounded-xl"
                             variants={{
                               hover: {
-                                background: "rgba(237, 27, 36, 0.15)",
+                                backgroundColor: "rgba(237, 27, 36, 0.15)",
                                 backdropFilter: "blur(8px)"
                               }
                             }}
@@ -629,11 +491,8 @@ const Navigation: React.FC<NavigationProps> = ({ className = "", onNavigate }) =
           </AnimatePresence>
         </div>
       </motion.nav>
-
-      {/* Cart Dropdown */}
-      <CartDropdown />
-    </AnimatePresence>
+    </div>
   );
-};
+});
 
 export default Navigation;
