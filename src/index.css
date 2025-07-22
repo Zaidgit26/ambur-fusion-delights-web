@@ -395,49 +395,92 @@
     background-color: hsl(var(--primary)); /* Primary Red */
   }
 
-  /* Enhanced Dark Glass Morphism Navbar Styles - Premium Contained Design with Theme Border */
+  /* Simple Solid Navbar Styles - Clean Design with Theme Colors */
   .navbar-glass-morphism {
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(237, 27, 36, 0.2);
-    box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.3),
-      0 2px 8px rgba(0, 0, 0, 0.2),
-      0 0 0 1px rgba(237, 27, 36, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.05);
-    will-change: transform, backdrop-filter;
+    background: rgba(55, 65, 81, 0.95); /* Gray-700 with slight transparency */
+    border: 1px solid rgba(107, 114, 128, 0.3); /* Gray-500 border */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    will-change: transform;
     transform: translateZ(0);
   }
 
   .navbar-scrolled-glass {
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    border: 1px solid rgba(237, 27, 36, 0.3);
-    box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.4),
-      0 4px 16px rgba(0, 0, 0, 0.25),
-      0 0 0 1px rgba(237, 27, 36, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.08);
-    will-change: transform, backdrop-filter;
+    background: rgba(31, 41, 55, 0.98); /* Gray-800 - slightly darker when scrolled */
+    border: 1px solid rgba(107, 114, 128, 0.4); /* Gray-500 border */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    will-change: transform;
     transform: translateZ(0);
   }
 
   .nav-item-active {
-    background: rgba(237, 27, 36, 0.15);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(237, 27, 36, 0.3);
-    box-shadow:
-      0 0 20px rgba(237, 27, 36, 0.3),
-      0 2px 8px rgba(237, 27, 36, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1),
-      inset 0 -1px 0 rgba(237, 27, 36, 0.1);
+    background: rgba(237, 27, 36, 0.9); /* Solid primary color background */
+    border: 1px solid rgba(237, 27, 36, 1);
+    box-shadow: 0 2px 8px rgba(237, 27, 36, 0.3);
     will-change: transform;
-    transform: translateZ(0);
+    transform: translateZ(0) scale(1.05);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  /* Enhanced navigation item transitions with smooth morphing */
+  .nav-item-transition {
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-origin: center;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Background morphing effect */
+  .nav-item-transition::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+      rgba(237, 27, 36, 0.1), 
+      rgba(237, 27, 36, 0.05),
+      rgba(237, 27, 36, 0.1)
+    );
+    border-radius: inherit;
+    opacity: 0;
+    transform: scale(0.7) rotate(5deg);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: -1;
+  }
+  
+  /* Smooth background transition on hover */
+  .nav-item-transition:hover::before {
+    opacity: 0.8;
+    transform: scale(1) rotate(0deg);
+  }
+  
+  /* Active state background override */
+  .nav-item-active::before {
+    opacity: 1 !important;
+    transform: scale(1) rotate(0deg) !important;
+    background: linear-gradient(135deg, 
+      rgba(237, 27, 36, 0.15), 
+      rgba(237, 27, 36, 0.1),
+      rgba(237, 27, 36, 0.15)
+    ) !important;
+  }
+  
+  /* Sliding highlight effect */
+  .nav-item-transition::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(237, 27, 36, 0.8), transparent);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: translateX(-50%);
+  }
+  
+  .nav-item-active::after {
+    width: 100%;
   }
 
   /* Removed .nav-item-hover as it's now handled by Framer Motion */
@@ -634,13 +677,33 @@
 
 @keyframes navbarSlideDown {
   from {
-    transform: translateY(-100%);
+    transform: translateY(-100%) scale(0.95);
     opacity: 0;
   }
   to {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
     opacity: 1;
   }
+}
+
+@keyframes navbarSlideUp {
+  from {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%) scale(0.95);
+    opacity: 0;
+  }
+}
+
+/* Enhanced navbar reveal animation */
+.navbar-reveal {
+  animation: navbarSlideDown 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.navbar-hide {
+  animation: navbarSlideUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 @keyframes mascotBounce {

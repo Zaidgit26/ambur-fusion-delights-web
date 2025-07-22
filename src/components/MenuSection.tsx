@@ -61,7 +61,7 @@ const MenuItemCard = memo(({ item, shouldReduceAnimations }: {
           className={`w-full ${
             responsive.isMobile ? 'h-20' : 'h-24 sm:h-32 md:h-40'
           } object-cover transition-transform duration-300 ${
-            shouldReduceAnimations ? '' : 'group-hover:scale-110'
+            shouldReduceAnimations ? '' : 'group-hover:scale-105'
           }`}
           loading="lazy"
           decoding="async"
@@ -87,7 +87,7 @@ const MenuItemCard = memo(({ item, shouldReduceAnimations }: {
         </div>
 
         {/* Rating - Hidden on mobile, visible on larger screens */}
-        <div className="absolute top-2 right-2 bg-black/70 text-white px-1.5 py-0.5 rounded-full items-center gap-1 hidden sm:flex">
+        <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm text-white px-1.5 py-0.5 rounded-full items-center gap-1 hidden sm:flex">
           <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
           <span className="text-xs font-poppins">{item.rating}</span>
         </div>
@@ -125,15 +125,12 @@ const MenuSection = memo(() => {
   const [activeCategory, setActiveCategory] = useState("all");
   const { shouldReduceAnimations } = useDevicePerformance();
   const responsive = useResponsiveBreakpoints();
-  // Removed unused hooks to fix React Hook violations
 
   const categories = [
-    { id: "all", name: "All Items", icon: "🍽️" },
-    { id: "appetizers", name: "Appetizers", icon: "🥗" },
-    { id: "biryani", name: "Biryani", icon: "🍛" },
-    { id: "curries", name: "Curries", icon: "🍜" },
-    { id: "desserts", name: "Desserts", icon: "🍰" },
-    { id: "beverages", name: "Beverages", icon: "🥤" }
+    { id: "all", name: "All", icon: "🍽️" },
+    { id: "biryani", name: "Briyani", icon: "🍛" },
+    { id: "chinese", name: "Chinese", icon: "🥡" },
+    { id: "bbq", name: "BBQ", icon: "🍖" },
   ];
 
   const menuItems: MenuItem[] = [
@@ -232,6 +229,30 @@ const MenuSection = memo(() => {
       isVeg: false,
       isSpicy: true,
       isPopular: false
+    },
+    {
+      id: "9",
+      name: "Schezwan Noodles",
+      description: "Spicy stir-fried noodles with vegetables and Schezwan sauce.",
+      price: 250,
+      image: "/api/placeholder/300/200",
+      category: "chinese",
+      rating: 4.5,
+      isVeg: true,
+      isSpicy: true,
+      isPopular: false
+    },
+    {
+      id: "10",
+      name: "BBQ Chicken Wings",
+      description: "Grilled chicken wings tossed in a smoky BBQ sauce.",
+      price: 290,
+      image: "/api/placeholder/300/200",
+      category: "bbq",
+      rating: 4.7,
+      isVeg: false,
+      isSpicy: false,
+      isPopular: true
     }
   ];
 
@@ -240,6 +261,8 @@ const MenuSection = memo(() => {
     if (activeCategory === "all") return menuItems;
     return menuItems.filter(item => item.category === activeCategory);
   }, [activeCategory, menuItems]);
+
+  // Category display logic - mobile vs desktop
 
 
 
@@ -256,20 +279,14 @@ const MenuSection = memo(() => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16 fade-in-up">
-          <Badge variant="secondary" className="mb-4 text-primary font-poppins">
-            Our Menu
-          </Badge>
-          <h2 className="font-spirax text-4xl md:text-5xl text-foreground mb-4">
-            Authentic Flavors
+          <h2 className="font-poppins text-4xl md:text-5xl text-foreground mb-4">
+            OUR MENU
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-poppins">
-            Discover our carefully crafted dishes made with traditional recipes and the finest ingredients. 
-            Each dish tells a story of authentic South Indian cuisine.
-          </p>
         </div>
 
         {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-12 fade-in-up px-2">
+          {/* Always visible categories */}
           {categories.map((category) => (
             <Button
               key={category.id}
@@ -279,7 +296,7 @@ const MenuSection = memo(() => {
               className={`font-poppins-medium transition-all duration-300 text-xs sm:text-sm ${
                 activeCategory === category.id
                   ? 'bg-primary text-white shadow-lg scale-105'
-                  : 'hover:bg-primary/10 hover:border-primary/50'
+                  : 'hover:bg-primary/10 hover:border-primary/50 hover:text-primary'
               }`}
             >
               <span className="mr-1 sm:mr-2 text-sm">{category.icon}</span>
@@ -290,7 +307,7 @@ const MenuSection = memo(() => {
         </div>
 
         {/* Menu Grid - Mobile-optimized spacing and layout */}
-        <div className={`grid mb-12 ${
+        <div className={`grid mb-6 ${
           responsive.isMobile
             ? 'grid-cols-2 gap-2'
             : 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6'

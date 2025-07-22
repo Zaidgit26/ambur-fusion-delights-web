@@ -3,33 +3,60 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Phone, MapPin, Clock, Mail, MessageCircle } from "lucide-react";
+import { Phone, MapPin, Clock, Mail, MessageCircle, ArrowUp } from "lucide-react";
 
 const Contact = () => {
+  // Scroll to top function
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  // Handle map link click
+  const handleMapClick = () => {
+    const address = encodeURIComponent("12, MC Rd, Ambur, Tamil Nadu, India");
+    window.open(`https://maps.google.com/maps?q=${address}`, '_blank');
+  };
+
+  // Handle phone call
+  const handlePhoneCall = () => {
+    window.open('tel:+919677938393', '_self');
+  };
+
+  // Handle WhatsApp
+  const handleWhatsApp = () => {
+    const message = encodeURIComponent("Hello! I would like to place an order at Ambur Fusion Delights.");
+    window.open(`https://wa.me/919677938393?text=${message}`, '_blank');
+  };
+
   const contactInfo = [
     {
       icon: <Phone className="w-6 h-6" />,
       title: "Phone",
-      details: ["+91 98765 43210", "+91 87654 32109"],
-      action: "Call Now"
+      details: ["+91 96779 38393", "Available for orders & queries"],
+      action: "Call Now",
+      onClick: handlePhoneCall
     },
     {
       icon: <MapPin className="w-6 h-6" />,
       title: "Location",
-      details: ["123 Food Street, Ambur", "Tamil Nadu 635802"],
-      action: "Get Directions"
+      details: ["12, MC Rd, Ambur", "Tamil Nadu, India"],
+      action: "Get Directions",
+      onClick: handleMapClick
     },
     {
       icon: <Clock className="w-6 h-6" />,
       title: "Hours",
-      details: ["Mon-Sun: 11:00 AM - 11:00 PM", "Special hours on festivals"],
+      details: ["Every day: 10:00 AM - 12:00 AM", "Open 365 days a year"],
       action: "View Schedule"
     },
     {
       icon: <Mail className="w-6 h-6" />,
-      title: "Email",
-      details: ["orders@amburbriyani.com", "info@amburbriyani.com"],
-      action: "Send Email"
+      title: "Features",
+      details: ["Credit Cards Accepted", "Delivery • Takeaway • Booking"],
+      action: "Learn More"
     }
   ];
 
@@ -74,7 +101,12 @@ const Contact = () => {
                         </p>
                       ))}
                     </div>
-                    <Button variant="outline" size="sm" className="text-xs font-poppins">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs font-poppins"
+                      onClick={info.onClick}
+                    >
                       {info.action}
                     </Button>
                   </CardContent>
@@ -89,11 +121,19 @@ const Contact = () => {
                   Quick Actions
                 </h4>
                 <div className="grid grid-cols-2 gap-4">
-                  <Button variant="hero" className="glow-on-hover font-poppins-medium">
+                  <Button 
+                    variant="hero" 
+                    className="glow-on-hover font-poppins-medium"
+                    onClick={handlePhoneCall}
+                  >
                     <Phone className="w-4 h-4 mr-2" />
                     Call to Order
                   </Button>
-                  <Button variant="spice" className="glow-on-hover font-poppins-medium">
+                  <Button 
+                    variant="spice" 
+                    className="glow-on-hover font-poppins-medium"
+                    onClick={handleWhatsApp}
+                  >
                     <MessageCircle className="w-4 h-4 mr-2" />
                     WhatsApp
                   </Button>
@@ -185,19 +225,41 @@ const Contact = () => {
               <h3 className="text-2xl font-poppins-bold text-foreground mb-4">
                 Find Us on the Map
               </h3>
-              <div className="bg-muted/30 h-64 rounded-lg flex items-center justify-center">
+              <div className="bg-muted/30 h-64 rounded-lg flex items-center justify-center relative overflow-hidden">
                 <div className="text-center">
                   <MapPin className="w-12 h-12 text-primary mx-auto mb-4" />
-                  <p className="text-muted-foreground font-poppins">
-                    Interactive map integration coming soon
+                  <p className="text-muted-foreground font-poppins mb-2">
+                    12, MC Rd, Ambur, Tamil Nadu, India
                   </p>
-                  <Button variant="outline" className="mt-4 font-poppins-medium">
-                    Get Directions via Google Maps
+                  <p className="text-sm text-muted-foreground font-poppins mb-4">
+                    Wheelchair Accessible • Easy Parking Available
+                  </p>
+                  <Button 
+                    variant="outline" 
+                    className="mt-4 font-poppins-medium"
+                    onClick={handleMapClick}
+                  >
+                    Open in Google Maps
                   </Button>
                 </div>
+                {/* Optional: Add a subtle background pattern or gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
               </div>
             </CardContent>
           </Card>
+        </div>
+        
+        {/* Go to Top Button */}
+        <div className="mt-12 text-center fade-in-up">
+          <Button 
+            onClick={scrollToTop}
+            variant="outline"
+            size="lg"
+            className="group font-poppins-medium bg-primary/10 border-primary hover:bg-primary hover:text-white transition-all duration-300 px-8 py-3"
+          >
+            <ArrowUp className="w-5 h-5 mr-2 group-hover:animate-bounce" />
+            Back to Top
+          </Button>
         </div>
       </div>
     </section>

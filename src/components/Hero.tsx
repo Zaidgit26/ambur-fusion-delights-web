@@ -2,17 +2,27 @@ import heroImage from "@/assets/hero-biryani.jpg";
 import logo from "@/assets/logo.png";
 import textLogo from "@/assets/TEXTLOGO.png";
 import { Button } from "@/components/ui/button";
+import { ArrowDown } from "lucide-react";
 
 const Hero = () => {
-  // Navigation handlers
+  // Navigation handlers - Updated to match navbar behavior
   const scrollToSection = (sectionId: string) => {
     const element = document.querySelector(sectionId);
     if (element) {
-      const navbarHeight = 80;
-      const offsetTop = (element as HTMLElement).offsetTop - navbarHeight;
-
+      const elementTop = (element as HTMLElement).offsetTop;
+      let scrollTop;
+      
+      // For menu and contact sections, scroll to show them completely
+      if (sectionId === '#menu' || sectionId === '#contact') {
+        // Add small offset to ensure clean section view without previous section
+        scrollTop = elementTop - 20;
+      } else {
+        // For home section, scroll to top
+        scrollTop = 0;
+      }
+      
       window.scrollTo({
-        top: Math.max(0, offsetTop),
+        top: Math.max(0, scrollTop),
         behavior: 'smooth'
       });
     }
@@ -23,12 +33,11 @@ const Hero = () => {
   };
 
   const handleOrderClick = () => {
-    // For now, scroll to contact section for ordering
-    // This can be updated to open an order modal or redirect to ordering system
-    scrollToSection('#contact');
+    // Scroll to menu section for ordering
+    scrollToSection('#menu');
   };
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden z-30">
       {/* Video Background - Fixed Implementation */}
       <div className="absolute inset-0">
         {/* Fallback Background Image */}
@@ -176,6 +185,19 @@ const Hero = () => {
             }}
           >
             ORDER ONLINE
+          </Button>
+        </div>
+        
+        {/* Order Now Arrow Button */}
+        <div className="mt-8 flex justify-center">
+          <Button 
+            onClick={handleOrderClick}
+            variant="ghost"
+            size="lg"
+            className="group font-poppins-medium text-white/80 hover:text-white transition-all duration-300 flex flex-col items-center gap-2 p-6 hover:bg-transparent"
+          >
+            <span className="text-sm tracking-wide hover:text-primary transition-colors duration-300">ORDER NOW</span>
+            <ArrowDown className="w-6 h-6 group-hover:animate-bounce group-hover:text-primary transition-colors duration-300" />
           </Button>
         </div>
       </div>
