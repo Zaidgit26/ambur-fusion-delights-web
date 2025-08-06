@@ -1,10 +1,31 @@
-import { useEffect } from "react";
-import Navigation from "@/components/ui/navigation";
+import { useEffect, lazy, Suspense } from "react";
+import ModernNavigation from "@/components/ModernNavigation";
 import Hero from "@/components/Hero";
-import MenuSection from "@/components/MenuSection";
-import Contact from "@/components/Contact";
+import ScrollToTop from "@/components/ScrollToTop";
+import { measurePerformance, getDeviceInfo } from "@/utils/performanceMonitor";
+
+// Lazy load heavy components for better performance
+const DarkMenuSection = lazy(() => import("@/components/DarkMenuSection"));
+const DarkContactSection = lazy(() => import("@/components/DarkContactSection"));
 
 const Index = () => {
+  useEffect(() => {
+    // Initialize performance monitoring
+    measurePerformance();
+    
+    // Log device info for debugging
+    const deviceInfo = getDeviceInfo();
+    console.log('Device Info:', deviceInfo);
+    
+    // Add performance class to body based on device
+    if (deviceInfo.isMobile) {
+      document.body.classList.add('mobile-device');
+    }
+    if (deviceInfo.isLowEnd || deviceInfo.isSlowConnection) {
+      document.body.classList.add('reduce-animations');
+    }
+  }, []);
+  
   useEffect(() => {
     // Add smooth scrolling for anchor links with navbar offset
     const handleHashScroll = () => {
@@ -39,13 +60,20 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
+    <div className="min-h-screen bg-dark">
+      <ModernNavigation />
       <main>
         <Hero />
-        <MenuSection />
-        <Contact />
+        <Suspense fallback={
+          <div className="flex items-center justify-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-primary"></div>
+          </div>
+        }>
+          <DarkMenuSection />
+          <DarkContactSection />
+        </Suspense>
       </main>
+      <ScrollToTop />
     </div>
   );
 };

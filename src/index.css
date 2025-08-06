@@ -1,5 +1,5 @@
 /* Import Consistent Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Spirax&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Spirax&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -891,5 +891,60 @@
     border: 2px solid;
     background: white;
     color: black;
+  }
+}
+
+/* Dark theme optimizations */
+.reduce-animations * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+.mobile-device {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+/* Smooth scrolling with performance */
+@supports (scroll-behavior: smooth) {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+  }
+}
+
+/* Modern card glassmorphism */
+.glass-card {
+  background: rgba(20, 20, 20, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(42, 42, 42, 0.5);
+}
+
+/* WhatsApp button glow effect */
+@keyframes whatsappGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(37, 211, 102, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(37, 211, 102, 0.8);
+  }
+}
+
+.whatsapp-glow {
+  animation: whatsappGlow 2s ease-in-out infinite;
+}
+
+/* Improved touch targets for mobile */
+@media (max-width: 768px) {
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  input, textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
   }
 }
