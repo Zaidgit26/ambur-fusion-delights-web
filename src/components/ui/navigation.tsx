@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
 import { Home, UtensilsCrossed, Phone, Menu, X } from 'lucide-react';
-import logo from '@/assets/logo.png';
+// Assets are now in public folder
+const logo = '/assets/logo.png';
 
 // TypeScript interfaces
 interface NavigationItem {

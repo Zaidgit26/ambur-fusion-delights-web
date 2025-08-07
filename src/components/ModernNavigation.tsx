@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import { Home, UtensilsCrossed, Phone, Menu, X, ChevronDown, Star, Clock, MapPin } from 'lucide-react';
-import logo from '@/assets/logo.png';
+// Assets are now in public folder
+const logo = '/assets/logo.png';
 
 interface NavigationItem {
   id: string;

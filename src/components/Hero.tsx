@@ -1,8 +1,10 @@
-import heroImage from "@/assets/hero-biryani.jpg";
-import logo from "@/assets/logo.png";
-import textLogo from "@/assets/TEXTLOGO.png";
 import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
+
+// Assets are now in public folder
+const heroImage = "/assets/hero-biryani.jpg";
+const logo = "/assets/logo.png";
+const textLogo = "/assets/TEXTLOGO.png";
 
 const Hero = () => {
   // Navigation handlers - Updated to match navbar behavior
