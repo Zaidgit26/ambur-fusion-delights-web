@@ -82,7 +82,7 @@ const Hero = () => {
           <div className="w-16 h-16">
             <img
               src={logo}
-              alt="Original Ambur Briyani Logo"
+              alt="Ambur Star Biryani Logo - Original Ambur Briyani Restaurant Since 1967"
               className="w-full h-full object-contain drop-shadow-lg hover:scale-105 transition-transform duration-300"
               onError={(e) => {
                 // Fallback to a default image or hide if logo fails to load
@@ -112,7 +112,7 @@ const Hero = () => {
           <div className="w-20 h-20 lg:w-24 lg:h-24">
             <img
               src={logo}
-              alt="Original Ambur Briyani Logo"
+              alt="Ambur Star Biryani Logo - Authentic Biryani Restaurant Near Me"
               className="w-full h-full object-contain drop-shadow-lg hover:scale-105 transition-transform duration-300"
               onError={(e) => {
                 // Fallback to a default image or hide if logo fails to load
@@ -137,15 +137,20 @@ const Hero = () => {
 
       {/* Center Content */}
       <div className="relative z-10 text-center px-4 max-w-6xl mx-auto">
-        {/* Main Title */}
+        {/* Main Title - SEO Optimized with keywords */}
         <h1 className="font-spirax text-3xl sm:text-6xl md:text-7xl lg:text-6xl xl:text-8xl text-white mb-6 leading-tight">
-          The taste of authentic
+          Authentic Ambur Biryani
         </h1>
 
-        {/* Subtitle */}
-        <h2 className="font-spirax text-2xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-6xl mb-12 leading-tight" style={{ color: '#ED1B24' }}>
-          Ambur Briyani
+        {/* Subtitle - SEO Optimized */}
+        <h2 className="font-spirax text-2xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-6xl mb-4 leading-tight" style={{ color: '#ED1B24' }}>
+          Best Biryani Near Me
         </h2>
+        
+        {/* Additional SEO subtitle */}
+        <p className="font-poppins text-lg sm:text-xl md:text-2xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed">
+          Traditional chicken biryani, mutton biryani & dum biryani since 1967. Order ambur biryani online for delivery.
+        </p>
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

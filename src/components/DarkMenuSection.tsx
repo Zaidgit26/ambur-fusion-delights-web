@@ -106,7 +106,7 @@ const DarkMenuSection = memo(() => {
 
   const categories = [
     { id: "all", name: "All", emoji: "🍽️" },
-    { id: "biryani", name: "Biryani", emoji: "🍛" },
+    { id: "Briyani", name: "Briyani", emoji: "🍛" },
     { id: "appetizers", name: "Starters", emoji: "🥘" },
     { id: "chinese", name: "Chinese", emoji: "🥡" },
     { id: "bbq", name: "BBQ", emoji: "🍖" },
@@ -121,10 +121,10 @@ const DarkMenuSection = memo(() => {
   const menuItems: MenuItem[] = [
     {
       id: "1",
-      name: "Mutton Biryani",
+      name: "Mutton Briyani",
       price: 280,
       image: "/assets/Menu Assets/Mutton Biryani.webp",
-      category: "biryani",
+      category: "Briyani",
       rating: 4.8,
       isVeg: false,
       isSpicy: true,
@@ -132,10 +132,10 @@ const DarkMenuSection = memo(() => {
     },
     {
       id: "2",
-      name: "Chicken Biryani",
+      name: "Chicken Briyani",
       price: 170,
-      image: "/assets/Menu Assets/Mutton Biryani.webp",
-      category: "biryani",
+      image: "/assets/Menu Assets/MuttoBriyani.webp",
+      category: "Briyani",
       rating: 4.8,
       isVeg: false,
       isSpicy: true,
@@ -301,7 +301,7 @@ const DarkMenuSection = memo(() => {
             Our Menu
           </h2>
           <p className="text-white-muted font-poppins text-lg max-w-2xl mx-auto">
-            Authentic Ambur Biryani and delicious Indian cuisine, delivered fresh to your doorstep
+            Authentic Ambur Briyani and delicious South Indian cuisine!
           </p>
         </motion.div>
 

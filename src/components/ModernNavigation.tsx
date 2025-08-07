@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
-import { Home, UtensilsCrossed, Phone, Menu, X, ChevronDown, Star, Clock, MapPin } from 'lucide-react';
+import { Home, Info, UtensilsCrossed, Phone, Menu, X, ChevronDown, Star, Clock, MapPin } from 'lucide-react';
 // Assets are now in public folder
 const logo = '/assets/logo.png';
 
@@ -19,6 +19,13 @@ const navigationItems: NavigationItem[] = [
     href: '#home',
     icon: Home,
     ariaLabel: 'Navigate to home section'
+  },
+  {
+    id: 'about',
+    name: 'About',
+    href: '#about',
+    icon: Info,
+    ariaLabel: 'Navigate to about section'
   },
   {
     id: 'menu',
@@ -65,7 +72,7 @@ const ModernNavigation = memo(() => {
     }
     
     // Detect active section
-    const sections = ['home', 'menu', 'contact'];
+    const sections = ['home', 'about', 'menu', 'contact'];
     let currentSection = 'home';
     
     // Only detect sections when nav is visible (outside hero)

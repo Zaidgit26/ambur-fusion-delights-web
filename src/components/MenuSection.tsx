@@ -57,7 +57,7 @@ const MenuItemCard = memo(({ item, shouldReduceAnimations }: {
         <img
           ref={imageRef as React.RefObject<HTMLImageElement>}
           src={optimizedImage}
-          alt={item.name}
+          alt={`${item.name} - Authentic Ambur Biryani ${item.isVeg ? 'Vegetarian' : ''} ${item.category === 'briyani' ? 'Best Biryani Near Me' : item.category}`}
           className={`w-full ${
             responsive.isMobile ? 'h-20' : 'h-24 sm:h-32 md:h-40'
           } object-cover transition-transform duration-300 ${
@@ -128,7 +128,7 @@ const MenuSection = memo(() => {
 
   const categories = [
     { id: "all", name: "All", icon: "🍽️" },
-    { id: "biryani", name: "Briyani", icon: "🍛" },
+    { id: "briyani", name: "Briyani", icon: "🍛" },
 
     { id: "chinese", name: "Chinese", icon: "🥡" },
     { id: "bbq", name: "BBQ", icon: "🍖" },
@@ -139,11 +139,11 @@ const MenuSection = memo(() => {
   const menuItems: MenuItem[] = [
     {
       id: "1",
-      name: "Mutton Biryani",
-      description: "Signature Ambur-style biryani with succulent mutton.",
+      name: "Ambur Mutton Biryani",
+      description: "Authentic Ambur-style mutton biryani with aromatic basmati rice, tender mutton, and traditional spices. Our signature dum biryani recipe since 1967.",
       price: 280,
       image: "/assets/Menu Assets/Mutton Biryani.webp",
-      category: "biryani",
+      category: "briyani",
       rating: 4.8,
       isVeg: false,
       isSpicy: true,
@@ -151,11 +151,11 @@ const MenuSection = memo(() => {
     },
     {
       id: "2",
-      name: "Chicken Biryani",
-      description: "Signature Ambur-style biryani with succulent Chicken.",
+      name: "Ambur Chicken Biryani",
+      description: "Best chicken biryani near me - Traditional Ambur-style biryani with succulent chicken, premium basmati rice and aromatic spices.",
       price: 170,
       image: "/assets/Menu Assets/Mutton Biryani.webp",
-      category: "biryani",
+      category: "briyani",
       rating: 4.8,
       isVeg: false,
       isSpicy: true,
@@ -328,11 +328,14 @@ const MenuSection = memo(() => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header */}
+        {/* Section Header - SEO Optimized */}
         <div className="text-center mb-16 fade-in-up">
           <h2 className="font-poppins text-4xl md:text-5xl text-foreground mb-4">
-            OUR MENU
+            Ambur Biryani Menu - Chicken Biryani & Mutton Biryani
           </h2>
+          <p className="font-poppins text-lg text-muted-foreground max-w-3xl mx-auto">
+            Discover our authentic Original Ambur Briyani menu featuring traditional dum biryani, chicken biryani near me, and signature mutton biryani recipes passed down since 1967.
+          </p>
         </div>
 
         {/* Category Filter */}

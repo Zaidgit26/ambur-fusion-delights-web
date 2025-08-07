@@ -5,6 +5,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { measurePerformance, getDeviceInfo } from "@/utils/performanceMonitor";
 
 // Lazy load heavy components for better performance
+const AboutSection = lazy(() => import("@/components/AboutSection"));
 const DarkMenuSection = lazy(() => import("@/components/DarkMenuSection"));
 const DarkContactSection = lazy(() => import("@/components/DarkContactSection"));
 
@@ -36,6 +37,13 @@ const Index = () => {
           // Special handling for home section
           if (hash === '#home') {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+          } else if (hash === '#about') {
+            // Special handling for about section
+            const offsetTop = (element as HTMLElement).offsetTop - 60;
+            window.scrollTo({
+              top: Math.max(0, offsetTop),
+              behavior: 'smooth'
+            });
           } else {
             // Account for navbar height for other sections
             const offsetTop = (element as HTMLElement).offsetTop - 80;
@@ -69,6 +77,7 @@ const Index = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-primary"></div>
           </div>
         }>
+          <AboutSection />
           <DarkMenuSection />
           <DarkContactSection />
         </Suspense>
